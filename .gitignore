@@ -1,0 +1,30 @@
+# .NET build output and Visual Studio settings
+[Bb]in/
+[Oo]bj/
+.vs/
+TestResults/
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+*.binlog
+
+# Local editor and tooling state
+/.vscode/
+/.idea/
+/.agents/
+/.codex/
+.aws/
+
+# Local configuration, publish profiles, and credentials
+.env
+.env.*
+!.env.example
+local.settings.json
+secrets.json
+*.pubxml
+*.publishsettings
+*.pfx
+*.p12
+*.snk

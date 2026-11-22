@@ -1,0 +1,34 @@
+<local:ThemedWindow x:Class="RunningPrograms.PublishWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:RunningPrograms"
+        Title="Publish Azure Function" Width="460" SizeToContent="Height"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        FontFamily="Segoe UI" FontSize="14">
+    <StackPanel Margin="20">
+        <Label Content="_Project" Target="{Binding ElementName=ProjectList}" Padding="0,0,0,5" />
+        <ListBox x:Name="ProjectList" DisplayMemberPath="Label" MaxHeight="132"
+                 SelectionChanged="ProjectList_SelectionChanged" />
+        <TextBlock x:Name="SingleProject" TextWrapping="Wrap" Visibility="Collapsed" />
+
+        <StackPanel x:Name="ProfilePicker" Margin="0,14,0,0" Visibility="Collapsed">
+            <Label Content="Publish p_rofile" Target="{Binding ElementName=ProfileList}" Padding="0,0,0,5" />
+            <ComboBox x:Name="ProfileList" DisplayMemberPath="Label" SelectionChanged="ProfileList_SelectionChanged" />
+        </StackPanel>
+
+        <Label Content="Function _app name" Target="{Binding ElementName=AppName}" Padding="0,0,0,5" Margin="0,14,0,0" />
+        <TextBox x:Name="AppName" Padding="6,4" />
+        <Label Content="_Deployment slot (optional)" Target="{Binding ElementName=SlotName}" Padding="0,0,0,5" Margin="0,10,0,0" />
+        <TextBox x:Name="SlotName" Padding="6,4" />
+        <Label Content="_Subscription ID (optional)" Target="{Binding ElementName=SubscriptionId}" Padding="0,0,0,5" Margin="0,10,0,0" />
+        <TextBox x:Name="SubscriptionId" Padding="6,4" />
+
+        <TextBlock x:Name="ValidationMessage" TextWrapping="Wrap" Margin="0,10,0,0" Visibility="Collapsed" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+            <Button Content="Cancel" IsCancel="True" MinWidth="80" Padding="10,4" Margin="0,0,8,0"
+                    ToolTip="Cancel this deployment." />
+            <Button Content="Publish" IsDefault="True" MinWidth="80" Padding="10,4" Click="ConfirmPublish_Click"
+                    ToolTip="Deploy the selected project to the Azure destination shown above." />
+        </StackPanel>
+    </StackPanel>
+</local:ThemedWindow>

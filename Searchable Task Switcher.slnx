@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Searchable Task Switcher.csproj" />
+  <Project Path="Libraries\WindowSwitcher.Core\WindowSwitcher.Core.csproj" />
+  <Project Path="Libraries\WindowSwitcher.Handlers.Chrome\WindowSwitcher.Handlers.Chrome.csproj" />
+  <Project Path="Libraries\WindowSwitcher.Handlers.Devenv\WindowSwitcher.Handlers.Devenv.csproj" />
+</Solution>
