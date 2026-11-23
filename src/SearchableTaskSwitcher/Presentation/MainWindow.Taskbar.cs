@@ -20,7 +20,7 @@ namespace RunningPrograms
         {
             base.OnSourceInitialized(e);
 
-            var source = (HwndSource)PresentationSource.FromVisual(this);
+            var source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
             globalShortcut = new GlobalShortcut(source, HandleGlobalShortcut);
 
             using (var stream = Application.GetResourceStream(App.ResourceUri("Assets/SearchableTaskSwitcher.ico")).Stream)
@@ -96,11 +96,6 @@ namespace RunningPrograms
             }
         }
 
-        private void DockButton_Click(object sender, RoutedEventArgs e)
-        {
-            DockToTaskbar();
-        }
-
         private void DockToTaskbar()
         {
             if (taskbarNotification == null)
@@ -112,20 +107,33 @@ namespace RunningPrograms
             Hide();
         }
 
+        internal void StartInTaskbar()
+        {
+            new WindowInteropHelper(this).EnsureHandle();
+            DockToTaskbar();
+        }
+
+        private void StartWithWindows_Click(object sender, RoutedEventArgs e)
+        {
+            bool enabled = StartWithWindows.IsChecked == true;
+            if (StartupPreferences.TrySetEnabled(enabled))
+            {
+                StartupStatus.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            StartWithWindows.IsChecked = StartupPreferences.IsEnabled();
+            StartupStatus.Text = "Windows could not save the startup setting.";
+            StartupStatus.Visibility = Visibility.Visible;
+        }
+
         private void HandleGlobalShortcut()
         {
             if (windowPresented && IsActive)
             {
                 ShortcutKey shortcut = globalShortcut.ConfiguredShortcut;
-                if (TryCycleGitFilter(shortcut.Key, shortcut.Modifiers))
+                if (TryCycleGitFilter(shortcut.Key, shortcut.Modifiers) || TryCycleApplications())
                 {
-                    return;
-                }
-
-                if (ProgramPicker.Items.Count > 1)
-                {
-                    ProgramPicker.SelectedIndex = (ProgramPicker.SelectedIndex + 1) % ProgramPicker.Items.Count;
-                    SolutionSearch.Focus();
                     return;
                 }
             }
@@ -183,6 +191,7 @@ namespace RunningPrograms
                 ? $"Open window ({shortcut})"
                 : $"Open window ({shortcut}, unavailable)";
             OpenWindowShortcutText.ToolTip = globalShortcut.Error;
+            ApplicationCycleShortcutText.Text = $"Cycle apps ({ApplicationCycleShortcut})";
             GitFilterShortcutText.Text = $"Cycle Git filters ({GitFilterShortcut})";
         }
 

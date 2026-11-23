@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:RunningPrograms"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
-        Title="{x:Static local:App.DisplayName}" Icon="Assets/SearchableTaskSwitcher.ico" Width="810" Height="640"
+        Title="{x:Static local:App.WindowTitle}" Icon="../Assets/SearchableTaskSwitcher.ico" Width="810" Height="640"
         MinWidth="310" MinHeight="470" WindowStartupLocation="CenterScreen"
         WindowStyle="None" ResizeMode="CanResize" ShowInTaskbar="True" PreviewKeyDown="Window_PreviewKeyDown"
         FontFamily="Segoe UI" FontSize="14">
@@ -42,9 +42,16 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.ColumnSpan="2" Margin="0,0,0,16" Text="{x:Static local:App.DisplayName}"
-                   FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
-                   Background="Transparent" MouseLeftButtonDown="WindowHeading_MouseLeftButtonDown" />
+        <DockPanel Grid.ColumnSpan="2" Margin="0,0,0,16" Background="Transparent"
+                   MouseLeftButtonDown="WindowHeading_MouseLeftButtonDown">
+            <Button x:Name="AboutButton" DockPanel.Dock="Right" Content="_About" Margin="12,0,0,0"
+                    Padding="10,4" VerticalAlignment="Center" Click="AboutButton_Click"
+                    ToolTip="Show the app version and license information." />
+            <TextBlock DockPanel.Dock="Right" Margin="12,0,0,0" VerticalAlignment="Center"
+                       Text="{x:Static local:App.VersionLabel}" />
+            <TextBlock Text="{x:Static local:App.DisplayName}" FontSize="24" FontWeight="SemiBold"
+                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+        </DockPanel>
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,16">
             <DockPanel Margin="0,0,0,12">
@@ -75,13 +82,10 @@
             </WrapPanel>
         </StackPanel>
 
-        <Grid Grid.Row="2" Margin="12,0,28,6">
-            <CheckBox x:Name="CheckAll" Content="Solution name" FontWeight="SemiBold" IsEnabled="False"
-                      HorizontalAlignment="Left" VerticalContentAlignment="Center"
-                      AutomationProperties.Name="Check all visible instances"
-                      ToolTip="Check or uncheck all visible instances." />
-            <TextBlock Text="PID" HorizontalAlignment="Right" FontWeight="SemiBold" />
-        </Grid>
+        <CheckBox Grid.Row="2" x:Name="CheckAll" Content="Solution name" Margin="12,0,0,6"
+                  FontWeight="SemiBold" IsEnabled="False" HorizontalAlignment="Left" VerticalContentAlignment="Center"
+                  AutomationProperties.Name="Check all visible instances"
+                  ToolTip="Check or uncheck all visible instances." />
 
         <ListBox x:Name="ProcessList" Grid.Row="3"
                  ItemContainerStyle="{DynamicResource InstanceItemStyle}"
@@ -108,7 +112,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
                         </Grid.ColumnDefinitions>
                         <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
                                   AutomationProperties.Name="{Binding AccessibleName}"
@@ -147,8 +150,6 @@
                                 </Path.Style>
                             </Path>
                         </Border>
-                        <TextBlock Grid.Column="2" Text="{Binding Entry.Id}"
-                                   Margin="16,0,0,0" TextAlignment="Right" VerticalAlignment="Center" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -169,8 +170,6 @@
                             ToolTip="Choose an Azure Functions project from the selected solution's repository to publish." ToolTipService.ShowOnDisabled="True" />
                     <Button x:Name="CloseButton" Content="Close" Margin="0,8,0,0" Padding="12,5" Click="CloseButton_Click"
                             ToolTip="Close the checked visible entries, or the highlighted entry if none are checked." ToolTipService.ShowOnDisabled="True" />
-                    <Button x:Name="DockButton" Content="Dock" Margin="0,8,0,0" Padding="12,5" Click="DockButton_Click"
-                            ToolTip="Hide this window in the taskbar notification area." />
                 </StackPanel>
             </ScrollViewer>
             <Button Grid.Row="1" x:Name="ShortcutButton" Content="Shortcut" Margin="0,8,0,0" Padding="12,5"
@@ -185,6 +184,9 @@
                        TextWrapping="Wrap" Visibility="Collapsed" />
             <TextBlock x:Name="CloseStatus" Margin="0,6,0,0" FontWeight="SemiBold"
                        TextWrapping="Wrap" Visibility="Collapsed" />
+            <CheckBox x:Name="StartWithWindows" Content="Start with Windows" Margin="0,8,0,0"
+                      Click="StartWithWindows_Click" ToolTip="Launch in the notification area when you sign in to Windows." />
+            <TextBlock x:Name="StartupStatus" Visibility="Collapsed" TextWrapping="Wrap" Margin="0,6,0,0" />
         </StackPanel>
 
         <StatusBar Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0" FontSize="12"
@@ -192,6 +194,7 @@
             <StatusBarItem HorizontalContentAlignment="Stretch">
                 <WrapPanel Margin="4,1">
                     <TextBlock x:Name="OpenWindowShortcutText" Margin="0,0,16,0" />
+                    <TextBlock x:Name="ApplicationCycleShortcutText" Margin="0,0,16,0" />
                     <TextBlock x:Name="GitFilterShortcutText" Margin="0,0,16,0" />
                     <TextBlock Text="Hide window (Esc)" />
                 </WrapPanel>

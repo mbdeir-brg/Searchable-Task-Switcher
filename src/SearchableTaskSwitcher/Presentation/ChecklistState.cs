@@ -63,10 +63,10 @@ namespace RunningPrograms
             GitRepositoryStatus.Unavailable => "Git status unavailable",
             _ => null
         };
-        public string AccessibleName => Entry.GitStatus.HasValue ? $"{Entry.Label}, {GitStatusText}, PID {Entry.Id}"
-            : Entry.WindowGroup != null ? $"{Entry.Label}, {Entry.WindowGroup}, PID {Entry.Id}" : $"{Entry.Label}, PID {Entry.Id}";
-        internal string CloseDescription => Entry.WindowGroup == null ? $"{Entry.Label} (PID {Entry.Id})"
-            : $"{Entry.Label} ({Entry.WindowGroup}, PID {Entry.Id})";
+        public string AccessibleName => (GitStatusText ?? Entry.WindowGroup) is string detail
+            ? $"{Entry.Label}, {detail}" : Entry.Label;
+        internal string CloseDescription => Entry.WindowGroup is string group
+            ? $"{Entry.Label} ({group})" : Entry.Label;
 
         public bool IsChecked
         {

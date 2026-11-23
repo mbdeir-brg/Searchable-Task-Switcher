@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<RootNamespace>RunningPrograms</RootNamespace>
+		<AssemblyName>SearchableTaskSwitcher</AssemblyName>
+		<AssemblyTitle>Searchable Task Switcher</AssemblyTitle>
+		<Product>Searchable Task Switcher</Product>
+		<Version>1.0.1</Version>
+		<ApplicationIcon>Assets\SearchableTaskSwitcher.ico</ApplicationIcon>
+		<Title>Searchable Task Switcher</Title>
+		<Authors>Mahmoud Bdeir</Authors>
+		<Description>A searchable Windows task switcher for developers and power users.</Description>
+		<Copyright>Copyright © 2026 Mahmoud Bdeir</Copyright>
+		<PackageProjectUrl>https://github.com/mbdeir-brg/Searchable-Task-Switcher</PackageProjectUrl>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="publish\**;installer\**" />
+		<Content Remove="publish\**;installer\**" />
+		<None Remove="publish\**;installer\**" />
+		<EmbeddedResource Remove="publish\**;installer\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Assets\SearchableTaskSwitcher.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Libraries\WindowSwitcher.Core\WindowSwitcher.Core.csproj" />
+		<ProjectReference Include="..\Libraries\WindowSwitcher.Handlers.Chrome\WindowSwitcher.Handlers.Chrome.csproj" />
+		<ProjectReference Include="..\Libraries\WindowSwitcher.Handlers.Devenv\WindowSwitcher.Handlers.Devenv.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,18 @@
+<local:ThemedWindow x:Class="RunningPrograms.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:RunningPrograms"
+        Title="About Searchable Task Switcher" Width="410" SizeToContent="Height"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        FontFamily="Segoe UI" FontSize="14">
+    <StackPanel Margin="20">
+        <TextBlock Text="{x:Static local:App.DisplayName}" FontSize="22" FontWeight="SemiBold" />
+        <TextBlock Text="{x:Static local:App.VersionLabel}" Margin="0,4,0,0" />
+        <TextBlock x:Name="AppDescription" TextWrapping="Wrap" Margin="0,14,0,0" />
+        <TextBlock x:Name="AppCopyright" TextWrapping="Wrap" Margin="0,14,0,0" />
+        <TextBlock Text="MIT License" Margin="0,4,0,0" />
+        <Button x:Name="CloseAboutButton" Content="Close" IsDefault="True" IsCancel="True"
+                HorizontalAlignment="Right" MinWidth="80" Padding="10,4" Margin="0,18,0,0"
+                ToolTip="Close this dialog." />
+    </StackPanel>
+</local:ThemedWindow>

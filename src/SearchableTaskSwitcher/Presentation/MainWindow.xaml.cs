@@ -14,6 +14,7 @@ namespace RunningPrograms
 {
     public partial class MainWindow : ThemedWindow
     {
+        private static readonly ShortcutKey ApplicationCycleShortcut = new ShortcutKey(Key.Space, ModifierKeys.Control);
         private static readonly ShortcutKey GitFilterShortcut = new ShortcutKey(Key.Tab, ModifierKeys.Control | ModifierKeys.Shift);
 
         private readonly ObservableCollection<string> programs = new ObservableCollection<string>(ProgramChoices.Load());
@@ -28,6 +29,7 @@ namespace RunningPrograms
         public MainWindow()
         {
             InitializeComponent();
+            StartWithWindows.IsChecked = StartupPreferences.IsEnabled();
             SolutionSearch.TextChanged += FiltersChanged;
             GitBoth.Checked += FiltersChanged;
             GitUpToDate.Checked += FiltersChanged;
@@ -43,6 +45,12 @@ namespace RunningPrograms
 
         private string SelectedProgram => ProgramPicker.SelectedItem as string ?? ProgramChoices.VisualStudio;
         private IEnumerable<ChecklistRow> VisibleRows => ProcessList.Items.Cast<ChecklistRow>();
+
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AboutWindow { Owner = this };
+            dialog.ShowDialog();
+        }
 
         private void AddProgram_Click(object sender, RoutedEventArgs e)
         {
@@ -226,16 +234,36 @@ namespace RunningPrograms
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            ModifierKeys modifiers = Keyboard.Modifiers;
+            ModifierKeys modifiers = e.KeyboardDevice.Modifiers;
             if (e.Key == Key.Escape && modifiers == ModifierKeys.None)
             {
                 e.Handled = true;
                 DockToTaskbar();
             }
+            else if (e.Key == ApplicationCycleShortcut.Key && modifiers == ApplicationCycleShortcut.Modifiers)
+            {
+                e.Handled = true;
+                if (!e.IsRepeat)
+                {
+                    TryCycleApplications();
+                }
+            }
             else if (TryCycleGitFilter(e.Key, modifiers, e.IsRepeat))
             {
                 e.Handled = true;
             }
+        }
+
+        private bool TryCycleApplications()
+        {
+            if (ProgramPicker.Items.Count < 2)
+            {
+                return false;
+            }
+
+            ProgramPicker.SelectedIndex = (ProgramPicker.SelectedIndex + 1) % ProgramPicker.Items.Count;
+            SolutionSearch.Focus();
+            return true;
         }
 
         private bool TryCycleGitFilter(Key key, ModifierKeys modifiers, bool isRepeat = false)

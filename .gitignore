@@ -15,7 +15,7 @@ TestResults/
 /.idea/
 /.agents/
 /.codex/
-.aws/
+/.aws/
 
 # Local configuration, publish profiles, and credentials
 .env
@@ -28,3 +28,9 @@ secrets.json
 *.pfx
 *.p12
 *.snk
+
+# Legacy published application files
+/publish/
+
+# Generated build and distribution files
+/artifacts/
